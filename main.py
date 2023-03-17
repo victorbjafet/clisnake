@@ -51,28 +51,28 @@ while True: # main loop that runs forever
         if (snakeArr[-1][0]-1,snakeArr[-1][1]) == apple: # if snake is going to eat apple
             newApple = True # set new apple to true
         elif visualCharArr[snakeArr[-1][0]-1][snakeArr[-1][1]] == "#" or visualCharArr[snakeArr[-1][0]-1][snakeArr[-1][1]] == "O": # if snake is going to hit wall or itself
-            break # break out of loop
+            break # break out of loop (TRIGGER)
         snakeArr.append((snakeArr[-1][0]-1,snakeArr[-1][1])) # add new body part to snake
 
     elif snakeDir == 180: # if snake is going left
         if (snakeArr[-1][0],snakeArr[-1][1]-1) == apple: # if snake is going to eat apple
             newApple = True # set new apple to true
         elif visualCharArr[snakeArr[-1][0]][snakeArr[-1][1]-1] == "#" or visualCharArr[snakeArr[-1][0]][snakeArr[-1][1]-1] == "O": # if snake is going to hit wall or itself
-            break # break out of loop
+            break # break out of loop (TRIGGER)
         snakeArr.append((snakeArr[-1][0],snakeArr[-1][1]-1)) # add new body part to snake
 
     elif snakeDir == 270:  # if snake is going down
         if (snakeArr[-1][0]+1,snakeArr[-1][1]) == apple: # if snake is going to eat apple
             newApple = True # set new apple to true
         elif visualCharArr[snakeArr[-1][0]+1][snakeArr[-1][1]] == "#" or visualCharArr[snakeArr[-1][0]+1][snakeArr[-1][1]] == "O": # if snake is going to hit wall or itself
-            break # break out of loop
+            break # break out of loop (TRIGGER)
         snakeArr.append((snakeArr[-1][0]+1,snakeArr[-1][1])) # add new body part to snake
 
     elif snakeDir == 0: # if snake is going right
         if (snakeArr[-1][0],snakeArr[-1][1]+1) == apple: # if snake is going to eat apple
             newApple = True # set new apple to true
         elif visualCharArr[snakeArr[-1][0]][snakeArr[-1][1]+1] == "#" or visualCharArr[snakeArr[-1][0]][snakeArr[-1][1]+1] == "O": # if snake is going to hit wall or itself
-            break # break out of loop
+            break # break out of loop (TRIGGER)
         snakeArr.append((snakeArr[-1][0],snakeArr[-1][1]+1)) # add new body part to snake
 
     if newApple != True: # if snake did not eat apple
@@ -105,14 +105,21 @@ while True: # main loop that runs forever
 
 
 #out of loop
+################################
+
+#LEAVING THE GAME LOOP MEANS YOU DIED, IT IS THE TRIGGER FOR ALL THE SQL CODE BELOW WHICH IS THE STORED PROCEDURE
+#TRIGGERS: LINES 54, 61, 68, 75
+#STORED PROCEDURE: LINES 121 AND 122
+
+############################
 os.system('cls' if os.name == 'nt' else 'clear') # clears screen
 
 print("You died!\nYou ate " + str(len(snakeArr) - 1) + " apples.") # print game over
 
 appleCount = len(snakeArr) - 1 # get apple count
 
-sqliteCursor.execute('INSERT INTO games (appleCount) VALUES (?);',(appleCount,)) # insert apple count into database
-sqliteCursor.execute("SELECT appleCount FROM games;") # get all apple counts
+sqliteCursor.execute('INSERT INTO games (appleCount) VALUES (?);',(appleCount,)) # insert apple count into database (STORED PROCEDURE)
+sqliteCursor.execute("SELECT appleCount FROM games;") # get all apple counts (STORED PROCEDURE)
 ans = sqliteCursor.fetchall() # store all apple counts in ans 
 
 totalApples = 0
